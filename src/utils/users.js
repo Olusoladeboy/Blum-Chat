@@ -1,4 +1,5 @@
 const users = []
+const rooms = []
 
 const addUser = ({ id, username, room }) => {
     username = username.trim().toLowerCase()
@@ -12,6 +13,16 @@ const addUser = ({ id, username, room }) => {
         return user.room === room && user.username === username
     })
 
+    const existingRoom = rooms.find((foundRoom) => {
+        return foundRoom.room === room
+    })
+
+    if(!existingRoom){
+        rooms.push({
+            room
+        })
+    }
+
     if(existingUser){
         return {
             error: 'Username is in use!'
@@ -22,6 +33,7 @@ const addUser = ({ id, username, room }) => {
     users.push(user)
     return { user }
 }
+
 
 const removeUser = (id) => {
     const index = users.findIndex((user) => {
@@ -37,6 +49,10 @@ const getUser = (id) => {
     return users.find((user) => user.id === id)
 }
 
+const getRoom = () => {
+    return rooms
+}
+
 const getUsersInRoom = (room) => {
     room =room.trim().toLowerCase()
     return users.filter((user) => user.room === room)
@@ -46,5 +62,6 @@ module.exports = {
     addUser,
     removeUser,
     getUser,
+    getRoom,     
     getUsersInRoom
 }

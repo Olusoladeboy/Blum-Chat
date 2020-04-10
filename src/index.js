@@ -4,7 +4,7 @@ const express = require('express')
 const socketio = require('socket.io')
 const Filter = require('bad-words')
 const { generateMessage, generateLocationMessage } = require('./utils/messages')
-const { addUser, removeUser, getUser, getUsersInRoom } = require('./utils/users')
+const { addUser, removeUser, getUser, getRoom, getUsersInRoom } = require('./utils/users')
 
 const app = express()
 const server = http.createServer(app)
@@ -23,6 +23,8 @@ let count = 0
 
 let message = 'Welcome!'
 
+io.on
+
 
 io.on('connection', (socket) => {
     console.log('New websocket connection')
@@ -37,17 +39,23 @@ io.on('connection', (socket) => {
 
     // Challenge Code
 
-    
+    const rooms = getRoom()
+    io.emit('rooms', rooms)
+ 
 
     socket.on('join', (options, callback) => {
         const { error, user } = addUser({ id: socket.id, ...options })
         if(error){
-            return callback()
+            console.log(error)
+            return callback(error)
+            
         }
 
         socket.join(user.room)
         socket.emit('message', generateMessage('Admin', 'Welcome'))        
         socket.broadcast.to(user.room).emit('message', generateMessage('Admin', `${user.username} has joined`))
+
+        console.log(rooms)
 
         io.to(user.room).emit('roomData', {
             room: user.room,

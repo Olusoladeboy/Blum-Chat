@@ -42,6 +42,7 @@ button {
     padding: 12px;
     background: #7C5CBF;
     border: none;
+    border-radius: 12px;
     color: white;
     font-size: 16px;
     transition: background .3s ease;
